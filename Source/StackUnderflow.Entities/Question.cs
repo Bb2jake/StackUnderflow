@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StackUnderflow.Entities
 {
@@ -13,5 +14,8 @@ namespace StackUnderflow.Entities
 		public DateTimeOffset CreatedDate { get; set; }
 
 		public int? AcceptedAnswerId { get; set; }
+
+		[NotMapped]
+		public int Votes { get; set; }
 	}
 }

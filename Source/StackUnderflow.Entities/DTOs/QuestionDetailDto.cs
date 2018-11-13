@@ -14,5 +14,6 @@ namespace StackUnderflow.Entities.DTOs
 	{
 		public Answer Answer { get; set; }
 		public List<Comment> Comments { get; set; }
+		public int Votes { get; set; }
 	}
 }

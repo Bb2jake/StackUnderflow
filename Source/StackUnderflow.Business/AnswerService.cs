@@ -3,6 +3,7 @@ using StackUnderflow.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace StackUnderflow.Business
 {
@@ -59,13 +60,13 @@ namespace StackUnderflow.Business
 						AnswerId = answerId,
 						Upvote = upVote
 					});
-
 				}
-				// TODO: Add a way to remove the vote if they upvote an upvote or downvote a downvote
+
 				// if vote exists, update it
 				else
 				{
 					existingVote.Upvote = upVote;
+					_context.AnswerVotes.Update(existingVote);
 				}
 
 				_context.SaveChanges();

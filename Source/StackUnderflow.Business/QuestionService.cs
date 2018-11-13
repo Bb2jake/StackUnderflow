@@ -3,6 +3,7 @@ using StackUnderflow.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using StackUnderflow.Entities.DTOs;
 
 namespace StackUnderflow.Business
@@ -28,17 +29,24 @@ namespace StackUnderflow.Business
 			}
 		}
 
-		public QuestionDetailDto GetQuestion(int questionId)
+		public QuestionDetailDto GetQuestion(int questionId, string userId)
 		{
 			try
 			{
 				var question = _context.Questions.Find(questionId);
+				var votes = _context.QuestionVotes.Where(qv => qv.QuestionId == questionId && qv.UserId == userId).ToList();
+				question.Votes = votes.Count(qv => qv.Upvote) - votes.Count(qv => !qv.Upvote);
+
 				var answerDtos = _context.Answers.Where(a => a.QuestionId == questionId)
-					.GroupJoin(_context.Comments, a => a.Id, c => c.AnswerId, (answer, comments) => new AnswerDto()
+					.GroupJoin(_context.AnswerVotes, a => a.Id, av => av.AnswerId, (a, avs) => new {a, avs = avs.ToList()})
+					.GroupJoin(_context.Comments, arg => arg.a.Id, c => c.AnswerId, (arg, comments) => new AnswerDto
 					{
-						Comments = comments.ToList(),
-						Answer = answer
-					}).ToList();
+						Votes = arg.avs.Count(av => av.Upvote) - arg.avs.Count(av => !av.Upvote),
+						Answer = arg.a,
+						Comments = comments.ToList()
+					})
+					.ToList();
+				
 				return new QuestionDetailDto
 				{
 					AnswerDtos = answerDtos,
