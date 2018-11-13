@@ -3,6 +3,7 @@ using StackUnderflow.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using StackUnderflow.Entities.DTOs;
 
 namespace StackUnderflow.Business
 {
@@ -27,11 +28,22 @@ namespace StackUnderflow.Business
 			}
 		}
 
-		public Question GetQuestion(int questionId)
+		public QuestionDetailDto GetQuestion(int questionId)
 		{
 			try
 			{
-				return _context.Questions.Find(questionId);
+				var question = _context.Questions.Find(questionId);
+				var answerDtos = _context.Answers.Where(a => a.QuestionId == questionId)
+					.GroupJoin(_context.Comments, a => a.Id, c => c.AnswerId, (answer, comments) => new AnswerDto()
+					{
+						Comments = comments.ToList(),
+						Answer = answer
+					}).ToList();
+				return new QuestionDetailDto
+				{
+					AnswerDtos = answerDtos,
+					Question = question
+				};
 			}
 			catch (Exception)
 			{
@@ -92,9 +104,11 @@ namespace StackUnderflow.Business
 		{
 			try
 			{
-				var question = GetQuestion(questionId);
+				var question = _context.Questions.Find(questionId);
 
-				// null result handled in GetQuestion method... I think
+				if (question == null) throw new Exception("Not found");
+
+				if (question.AcceptedAnswerId != null) throw new Exception("Already accepted an answer!");
 
 				question.AcceptedAnswerId = answerId;
 

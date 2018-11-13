@@ -13,29 +13,24 @@ using StackUnderflow.Entities;
 
 namespace StackUnderflow.Web.Controllers
 {
-    public class CommentsController : Controller
+	[Route("api/[controller]")]
+	[ApiController]
+	public class CommentsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 	    private readonly CommentService _cs;
-	    private readonly UserManager<IdentityUser> _um;
 
-	    public CommentsController(UserManager<IdentityUser> um, ApplicationDbContext context, CommentService cs)
+	    public CommentsController(ApplicationDbContext context, CommentService cs)
 	    {
-		    _um = um;
             _context = context;
 	        _cs = cs;
         }
 
-        // POST: Comments/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CommentOnAnswer([Bind("Id,AnswerId,Body,CreatedBy,CreatedDate")] Comment comment)
+        public IActionResult CommentOnAnswer([FromBody] Comment comment)
         {
 	        if (!ModelState.IsValid) return BadRequest();
-	        var userId = _um.GetUserId(HttpContext.User);
-	        comment.CreatedBy = userId;
+	        comment.CreatedBy = "123";
 
 	        _cs.Create(comment);
 	        return Ok(comment);

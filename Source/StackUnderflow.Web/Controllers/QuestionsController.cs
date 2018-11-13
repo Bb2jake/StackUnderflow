@@ -54,7 +54,7 @@ namespace StackUnderflow.Web.Controllers
 		public IActionResult VoteOnQuestion(int questionId, [FromQuery] bool upvote)
 		{
 //			var userId = _um.GetUserId(HttpContext.User);
-			_qs.Vote(1, questionId, upvote);
+			_qs.Vote("1", questionId, upvote);
 			return Ok();
 		}
 
