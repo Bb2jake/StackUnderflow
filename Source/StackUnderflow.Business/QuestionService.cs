@@ -97,6 +97,7 @@ namespace StackUnderflow.Business
 				else
 				{
 					existingVote.Upvote = upVote;
+					_context.QuestionVotes.Update(existingVote);
 				}
 
 				_context.SaveChanges();
@@ -106,7 +107,6 @@ namespace StackUnderflow.Business
 				throw new Exception();
 			}
 		}
-
 
 		public void AcceptAnswer(int questionId, int answerId)
 		{

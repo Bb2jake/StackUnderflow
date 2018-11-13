@@ -33,7 +33,7 @@ namespace StackUnderflow.Web.Controllers
 
 		[HttpPut("{answerId}")]
 		// GET: Questions/Edit/5
-		public IActionResult VoteOnAnswer(int answerId, [FromBody] bool upvote)
+		public IActionResult VoteOnAnswer(int answerId, [FromQuery] bool upvote)
 		{
 //			var userId = _um.GetUserId(HttpContext.User);
 
