@@ -2,35 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StackUnderflow.Data;
 
 namespace StackUnderflow.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181114005606_add-user-claim-dbset")]
+    partial class adduserclaimdbset
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.0-preview3-35497");
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<string>", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ConcurrencyStamp");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("NormalizedName");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IdentityRoles");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
@@ -46,17 +32,6 @@ namespace StackUnderflow.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("IdentityUserClaim");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("RoleId");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("RoleId", "UserId");
-
-                    b.ToTable("IdentityUserRoles");
                 });
 
             modelBuilder.Entity("StackUnderflow.Entities.Answer", b =>

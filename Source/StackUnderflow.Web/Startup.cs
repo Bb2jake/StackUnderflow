@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StackUnderflow.Business;
 using StackUnderflow.Data;
+using StackUnderflow.Entities;
 
 namespace StackUnderflow.Web
 {
@@ -31,6 +32,33 @@ namespace StackUnderflow.Web
 			services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlite("Data Source=stackunderflow.db", b => b.MigrationsAssembly("StackUnderflow.Web")));
 
+			services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+				{
+					options.Password.RequireNonAlphanumeric = false;
+					options.Password.RequireDigit = false;
+					options.Password.RequireLowercase = false;
+					options.Password.RequireUppercase = false;
+				})
+				.AddEntityFrameworkStores<ApplicationDbContext>()
+				.AddDefaultTokenProviders();
+
+			// Will return 401 instead of a redirect when a user attempts
+			// to access an area without authorization.
+			services.ConfigureApplicationCookie(options =>
+			{
+				options.Events.OnRedirectToAccessDenied = context =>
+				{
+					context.Response.StatusCode = 401;
+					return Task.CompletedTask;
+				};
+				options.Events.OnRedirectToLogin = context =>
+				{
+					context.Response.StatusCode = 401;
+					return Task.CompletedTask;
+				};
+			});
+			services.AddTransient<UserManager<ApplicationUser>>();
+			services.AddTransient<SignInManager<ApplicationUser>>();
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 			services.AddCors();
 			services.AddTransient<QuestionService>();
@@ -51,6 +79,8 @@ namespace StackUnderflow.Web
 					.AllowAnyHeader()
 					.AllowAnyMethod()
 			);
+			
+			app.UseAuthentication();
 
 			app.UseMvc();
 		}
