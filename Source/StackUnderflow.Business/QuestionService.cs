@@ -21,7 +21,16 @@ namespace StackUnderflow.Business
 		{
 			try
 			{
-				return _context.Questions.ToList();
+				return _context.Questions
+					.GroupJoin(_context.QuestionVotes, q => q.Id, qv => qv.QuestionId, (q, qvs) => new Question
+					{
+						Id = q.Id,
+						Votes = qvs.Count(qv => qv.Upvote) - qvs.Count(qv => !qv.Upvote),
+						AcceptedAnswerId = q.AcceptedAnswerId,
+						Body = q.Body,
+						CreatedBy = q.CreatedBy,
+						CreatedDate = q.CreatedDate
+					}).ToList();
 			}
 			catch
 			{

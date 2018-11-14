@@ -16,6 +16,7 @@ namespace StackUnderflow.Data
 
 		public DbSet<QuestionVote> QuestionVotes { get; set; }
 
+		// Identity
 		public DbSet<ApplicationUser> Users { get; set; }
 
 		public DbSet<IdentityUserClaim<string>> IdentityUserClaim { get; set; }
