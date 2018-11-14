@@ -43,7 +43,7 @@ namespace StackUnderflow.Business
 			try
 			{
 				var question = _context.Questions.Find(questionId);
-				var votes = _context.QuestionVotes.Where(qv => qv.QuestionId == questionId && qv.UserId == userId).ToList();
+				var votes = _context.QuestionVotes.Where(qv => qv.QuestionId == questionId && qv.UserName == userId).ToList();
 				question.Votes = votes.Count(qv => qv.Upvote) - votes.Count(qv => !qv.Upvote);
 
 				var answerDtos = _context.Answers.Where(a => a.QuestionId == questionId)
@@ -68,13 +68,13 @@ namespace StackUnderflow.Business
 			}
 		}
 
-		public Question Create(Question question)
+		public Question Create(Question question, string userName)
 		{
 			try
 			{
 				question.CreatedDate = DateTimeOffset.Now;
 				question.AcceptedAnswerId = null;
-				// question.CreatedBy = // currentUser
+				question.CreatedBy = userName;
 				_context.Questions.Add(question);
 				_context.SaveChanges();
 				return question;
@@ -85,18 +85,18 @@ namespace StackUnderflow.Business
 			}
 		}
 
-		public void Vote(string userId, int questionId, bool upVote)
+		public void Vote(string userName, int questionId, bool upVote)
 		{
 			try
 			{
-				var existingVote = _context.QuestionVotes.FirstOrDefault(v => v.UserId == userId && v.QuestionId == questionId);
+				var existingVote = _context.QuestionVotes.FirstOrDefault(v => v.UserName == userName && v.QuestionId == questionId);
 
 				// if vote doesn't exist, add it
 				if (existingVote == null)
 				{
 					_context.QuestionVotes.Add(new QuestionVote()
 					{
-						UserId = userId,
+						UserName = userName,
 						QuestionId = questionId,
 						Upvote = upVote
 					});
@@ -117,14 +117,14 @@ namespace StackUnderflow.Business
 			}
 		}
 
-		public void AcceptAnswer(int questionId, int answerId)
+		public void AcceptAnswer(int questionId, int answerId, string userName)
 		{
 			try
 			{
 				var question = _context.Questions.Find(questionId);
 
 				if (question == null) throw new Exception("Not found");
-
+				if (question.CreatedBy != userName) throw new Exception("Not the correct user");
 				if (question.AcceptedAnswerId != null) throw new Exception("Already accepted an answer!");
 
 				question.AcceptedAnswerId = answerId;

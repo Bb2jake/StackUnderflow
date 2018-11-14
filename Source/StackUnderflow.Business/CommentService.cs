@@ -13,14 +13,14 @@ namespace StackUnderflow.Business
 			_context = context;
 		}
 
-		public void Create(Comment comment)
+		public void Create(Comment comment, string userName)
 		{
 			try
 			{
 				var answer = _context.Answers.Find(comment.AnswerId);
 				if (answer == null) throw new Exception("answer not found");
 				comment.CreatedDate = DateTimeOffset.Now;
-
+				comment.CreatedBy = userName;
 				_context.Comments.Add(comment);
 				_context.SaveChanges();
 			}

@@ -79,7 +79,7 @@ namespace StackUnderflow.Web
 					.AllowAnyHeader()
 					.AllowAnyMethod()
 			);
-			
+
 			app.UseAuthentication();
 
 			app.UseMvc();

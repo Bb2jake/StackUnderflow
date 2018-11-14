@@ -9,7 +9,7 @@ namespace StackUnderflow.Entities
 
 		public string Body { get; set; }
 
-		public int CreatedBy { get; set; }
+		public string CreatedBy { get; set; }
 
 		public DateTimeOffset CreatedDate { get; set; }
 

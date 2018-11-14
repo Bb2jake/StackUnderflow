@@ -2,6 +2,7 @@
 using StackUnderflow.Data;
 using StackUnderflow.Entities;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using StackUnderflow.Business;
 
@@ -21,23 +22,21 @@ namespace StackUnderflow.Web.Controllers
 		}
 
 		[HttpPost]
+		[Authorize]
 		public IActionResult PostAnswer([FromBody] Answer answer)
 		{
 			if (!ModelState.IsValid) return BadRequest();
 
-			answer.CreatedBy = "123";
-			_as.PostAnswer(answer);
+			_as.PostAnswer(answer, HttpContext.User.Identity.Name);
 			return Ok(answer);
 		}
 
 
 		[HttpPut("{answerId}")]
-		// GET: Questions/Edit/5
+		[Authorize]
 		public IActionResult VoteOnAnswer(int answerId, [FromQuery] bool upvote)
 		{
-//			var userId = _um.GetUserId(HttpContext.User);
-
-			_as.Vote("123", answerId, upvote);
+			_as.Vote(HttpContext.User.Identity.Name, answerId, upvote);
 			return Ok();
 		}
 	}

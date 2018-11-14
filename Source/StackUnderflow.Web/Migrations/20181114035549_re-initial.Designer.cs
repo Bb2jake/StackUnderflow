@@ -9,14 +9,30 @@ using StackUnderflow.Data;
 namespace StackUnderflow.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181114005606_add-user-claim-dbset")]
-    partial class adduserclaimdbset
+    [Migration("20181114035549_re-initial")]
+    partial class reinitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.0-preview3-35497");
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("NormalizedName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityRoles");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
@@ -32,6 +48,17 @@ namespace StackUnderflow.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("IdentityUserClaim");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("RoleId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("RoleId", "UserId");
+
+                    b.ToTable("IdentityUserRoles");
                 });
 
             modelBuilder.Entity("StackUnderflow.Entities.Answer", b =>
@@ -61,7 +88,7 @@ namespace StackUnderflow.Web.Migrations
 
                     b.Property<bool>("Upvote");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 
@@ -133,7 +160,7 @@ namespace StackUnderflow.Web.Migrations
 
                     b.Property<string>("Body");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<string>("CreatedBy");
 
                     b.Property<DateTimeOffset>("CreatedDate");
 
@@ -151,7 +178,7 @@ namespace StackUnderflow.Web.Migrations
 
                     b.Property<bool>("Upvote");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 

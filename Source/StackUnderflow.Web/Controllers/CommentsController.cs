@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -27,12 +28,12 @@ namespace StackUnderflow.Web.Controllers
         }
 
         [HttpPost]
+		[Authorize]
         public IActionResult CommentOnAnswer([FromBody] Comment comment)
         {
 	        if (!ModelState.IsValid) return BadRequest();
-	        comment.CreatedBy = "123";
 
-	        _cs.Create(comment);
+	        _cs.Create(comment, HttpContext.User.Identity.Name);
 	        return Ok(comment);
         }
     }

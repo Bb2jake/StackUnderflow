@@ -16,7 +16,7 @@ namespace StackUnderflow.Web.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.0-preview3-35497");
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -86,7 +86,7 @@ namespace StackUnderflow.Web.Migrations
 
                     b.Property<bool>("Upvote");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 
@@ -158,7 +158,7 @@ namespace StackUnderflow.Web.Migrations
 
                     b.Property<string>("Body");
 
-                    b.Property<int>("CreatedBy");
+                    b.Property<string>("CreatedBy");
 
                     b.Property<DateTimeOffset>("CreatedDate");
 
@@ -176,7 +176,7 @@ namespace StackUnderflow.Web.Migrations
 
                     b.Property<bool>("Upvote");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 
