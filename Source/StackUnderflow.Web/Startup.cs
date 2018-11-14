@@ -75,7 +75,8 @@ namespace StackUnderflow.Web
 			}
 
 			app.UseCors(builder =>
-				builder.AllowAnyOrigin()
+				builder.SetIsOriginAllowed(o => o.Contains("localhost"))
+					.AllowCredentials()
 					.AllowAnyHeader()
 					.AllowAnyMethod()
 			);

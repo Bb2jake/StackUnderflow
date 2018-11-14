@@ -38,12 +38,12 @@ namespace StackUnderflow.Business
 			}
 		}
 
-		public QuestionDetailDto GetQuestion(int questionId, string userId)
+		public QuestionDetailDto GetQuestion(int questionId)
 		{
 			try
 			{
 				var question = _context.Questions.Find(questionId);
-				var votes = _context.QuestionVotes.Where(qv => qv.QuestionId == questionId && qv.UserName == userId).ToList();
+				var votes = _context.QuestionVotes.Where(qv => qv.QuestionId == questionId).ToList();
 				question.Votes = votes.Count(qv => qv.Upvote) - votes.Count(qv => !qv.Upvote);
 
 				var answerDtos = _context.Answers.Where(a => a.QuestionId == questionId)

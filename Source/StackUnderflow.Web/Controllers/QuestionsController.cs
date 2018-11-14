@@ -33,7 +33,7 @@ namespace StackUnderflow.Web.Controllers
 		[HttpGet("{id}")]
 		public IActionResult GetQuestionDetails(int id)
 		{
-			var question = _qs.GetQuestion(id, "123");
+			var question = _qs.GetQuestion(id);
 
 			return Ok(question);
 		}
